@@ -22,14 +22,23 @@ const useStyles = theme => ({
   },
   pos: {
     marginBottom: 12,
-  },
-});
+  },});
 
 class Product extends Component{
 
+  constructor(props) {
+    super(props);
+    this.onChange = this.onChange.bind(this);
+  }
+
+  onChange(event){
+    this.props.handleChange(event, this.props.id);
+
+  }
   render() {
     const { classes } = this.props;
     const product = this.props.product;
+    const amount = this.props.value;
 
     return (
       <Card className={classes.card}>
@@ -44,7 +53,12 @@ class Product extends Component{
             <CurrencyFormat value={product.value} decimalSeparator={','} decimalScale={2} fixedDecimalScale={true} isNumericString={true} displayType={'text'} prefix={'R$'} />
 
           </Typography>
-          <NumericInput min={0} max={100} value={0} onChange={this.props.handleChange(this.props.key)}/>
+          <NumericInput mobile={true} min={0} max={100} style={{
+            input: {
+              fontSize: 24,
+              width: '100%'
+            }
+          }} value={amount} onChange={this.onChange}/>
         </CardContent>
       </Card>
     );
@@ -53,6 +67,9 @@ class Product extends Component{
 
 Product.propTypes = {
   product: PropTypes.object.isRequired,
+  id: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
+  handleChange: PropTypes.func.isRequired,
 };
 
 export default withStyles(useStyles)(Product);
