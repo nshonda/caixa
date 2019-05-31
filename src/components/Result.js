@@ -19,13 +19,24 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import purple from '@material-ui/core/colors/purple';
 import teal from '@material-ui/core/colors/teal';
 import orange from '@material-ui/core/colors/orange';
-import indigo from '@material-ui/core/colors/indigo';
 
 const useStyles = theme => ({
   appBar: {
-    position: 'relative',
+    position: 'fixed',
   },
   root: {
+    padding: theme.spacing(3, 2),
+  },
+  rootTotal: {
+    marginTop: 50,
+    padding: theme.spacing(3, 2),
+    position: 'fixed',
+    width: '100%',
+    borderRadius: 0,
+    zIndex: 1
+  },
+  rootPedidos: {
+    marginTop: 120,
     padding: theme.spacing(3, 2),
   },
   title: {
@@ -52,11 +63,6 @@ const useStyles = theme => ({
     margin: 10,
     color: '#fff',
     backgroundColor: orange[500],
-  },
-  10: {
-    margin: 10,
-    color: '#fff',
-    backgroundColor: indigo[500],
   },
 });
 
@@ -95,12 +101,28 @@ class Result extends Component{
             </Typography>
           </Toolbar>
         </AppBar>
-        <Paper className={classes.root}>
+        <Paper className={classes.rootTotal}>
         <Typography variant="h5" component="h3">
           Total: 
           <span className={classes.span}><CurrencyFormat value={total} decimalSeparator={','} decimalScale={2} fixedDecimalScale={true} isNumericString={true} displayType={'text'} prefix={'R$'} /></span>
         </Typography>
-      </Paper>      
+      </Paper> 
+          <Divider />
+        <Paper className={classes.rootPedidos}>
+        <Typography variant="h6" component="h3">
+          Items Pedidos
+        </Typography>
+        <List>
+        {products.map((product, index) => {
+        if(product.amount > 0 && product.visible){ 
+          return <ListItem key={index}>
+          <ListItemText classes={{ primary: classes.list }} primary={ product.amount + ' - ' + product.name } />
+          </ListItem>}
+          else return null;
+      })}
+        </List>
+      </Paper>
+
       <Divider />
       <Paper className={classes.root}>
         <Typography variant="h6" component="h3">
@@ -117,26 +139,13 @@ class Result extends Component{
       ))}
         </List>
       </Paper>
-          <Divider />
-        <Paper className={classes.root}>
-        <Typography variant="h6" component="h3">
-          Items Pedidos
-        </Typography>
-        <List>
-        {products.map((product, index) => {
-        if(product.amount > 0){return <ListItem key={index}>
-          <ListItemText classes={{ primary: classes.list }} primary={ product.amount + ' - ' + product.name } />
-        </ListItem>}
-      })}
-        </List>
-      </Paper>
       </Dialog>
     );
   }
 }
 
 Result.propTypes = {
-  products: PropTypes.object.isRequired,
+  products: PropTypes.array.isRequired,
   total: PropTypes.number.isRequired,
   chips: PropTypes.object.isRequired,
   open: PropTypes.bool.isRequired,

@@ -41,7 +41,7 @@ class Product extends Component{
     const amount = this.props.value;
 
     return (
-      <Card className={classes.card}>
+      product.visible && <Card className={classes.card}>
         <CardContent>
           <Typography className={classes.title} color="textSecondary" gutterBottom>
             
